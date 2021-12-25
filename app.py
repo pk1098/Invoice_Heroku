@@ -10,11 +10,14 @@ def _get_pdfkit_config():
      Returns:
          A pdfkit configuration
      """
-     if platform.system() == 'Windows':
-         return pdfkit.configuration(wkhtmltopdf=os.environ.get('WKHTMLTOPDF_BINARY', 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'))
+     if platform.system() == "Windows":
+        return pdfkit.configuration(wkhtmltopdf=os.environ.get('WKHTMLTOPDF_BINARY', 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'))
      else:
-         WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf')], stdout=subprocess.PIPE).communicate()[0].strip()
-         return pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
+        os.environ['PATH'] += os.pathsep + os.path.dirname(sys.executable) 
+        WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf')], 
+            stdout=subprocess.PIPE).communicate()[0].strip()
+        return pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
+    
 
 app = Flask(__name__,template_folder='templates')
 @app.route("/")
@@ -57,8 +60,17 @@ def login():
 
         rendered = render_template('index.html',payload=output)
         # config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+        options={
+            'page-size': 'A4',
+            'margin-top': '0',
+            'margin-right': '0',
+            'margin-left': '0',
+            'margin-bottom': '0',
+            'zoom': '1.2',
+            'encoding': "UTF-8",
+        }
         config = _get_pdfkit_config()
-        pdf = pdfkit.from_string(rendered, False, configuration=config)
+        pdf = pdfkit.from_string(rendered, False, configuration=config,options=options)
         response = make_response(pdf)
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
