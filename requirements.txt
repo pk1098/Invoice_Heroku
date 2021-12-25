@@ -3,5 +3,4 @@ Flask==1.0.2
 gunicorn==20.1.0
 Werkzeug==2.0.2
 Jinja2==3.0.2
-wkhtmltopdf-pack-ng==0.12.3.0
 # git+git://github.com/johnfraney/wkhtmltopdf-pack.git
