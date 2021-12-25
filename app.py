@@ -63,21 +63,6 @@ def login():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
         return response
-# @app.route('/')
-# def pdf_generate():
-#     now = date.today()
-#     rendered = render_template('index.html',date=now)
-#     css = ['style.css']
-#     config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
-#     pdf = pdfkit.from_string(rendered, False, configuration=config)
-#     response = make_response(pdf)
-#     response.headers['Content-Type'] = 'application/pdf'
-#     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
-    
-    
-    # print ("Current date and time : ")
-    # print (now.strftime("%Y-%m-%d %H:%M:%S"))
-    # return response
 
     
 if __name__ == '__main__':
